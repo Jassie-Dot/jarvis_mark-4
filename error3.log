@@ -1,0 +1,68 @@
+﻿node : file:///E:/ult
+ra-jarvis/server.js:3
+80
+At line:1 char:1
++ node server.js 
+2>&1 | Out-File 
+-Encoding utf8 
+error3.log
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (file://   
+ /E:/ultra-jarvis    
+/server.js:380:S    
+tring) [], Remot    
+eException
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+import PluginLoader 
+from "./lib/plugin-lo
+ader.js";
+^^^^^^^^^^^^^^^^^^^
+
+SyntaxError: 
+Identifier 
+'PluginLoader' has 
+already been declared
+    at compileSourceT
+extModule (node:inter
+nal/modules/esm/utils
+:318:16)
+    at ModuleLoader.m
+oduleStrategy (node:i
+nternal/modules/esm/t
+ranslators:111:18)
+    at #translate (no
+de:internal/modules/e
+sm/loader:473:20)
+    at afterLoad (nod
+e:internal/modules/es
+m/loader:529:29)
+    at ModuleLoader.l
+oadAndTranslate (node
+:internal/modules/esm
+/loader:534:12)
+    at #getOrCreateMo
+duleJobAfterResolve (
+node:internal/modules
+/esm/loader:571:36)
+    at afterResolve (
+node:internal/modules
+/esm/loader:624:52)
+    at ModuleLoader.g
+etOrCreateModuleJob (
+node:internal/modules
+/esm/loader:630:12)
+    at onImport.trace
+Promise.__proto__ (no
+de:internal/modules/e
+sm/loader:649:32)
+    at TracingChannel
+.tracePromise (node:d
+iagnostics_channel:35
+0:14)
+
+Node.js v24.13.0

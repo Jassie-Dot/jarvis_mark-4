@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>JARVIS Mark IV — Desktop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="bios.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body data-mode="chat">
+  <!-- ADVANCED BOOT OVERLAY -->
+  <!-- ADVANCED BOOT OVERLAY REMOVED -->
+
+  <!-- ADVANCED RETRO BIOS STARTUP -->
+  <!-- ADVANCED RETRO BIOS STARTUP -->
+  <div id="bios-screen">
+    <div class="crt-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="glow-overlay"></div>
+
+    <div class="bios-container">
+      <div class="bios-header">
+        <div class="energy-star">
+          <svg viewBox="0 0 100 100" class="energy-star-logo">
+            <path d="M50 5 L63 35 L95 40 L72 62 L78 95 L50 80 L22 95 L28 62 L5 40 L37 35 Z" fill="none"
+              stroke="currentColor" stroke-width="2" />
+            <path d="M50 15 L60 38 L85 42 L68 60 L72 85 L50 72 L28 85 L32 60 L15 42 L40 38 Z" fill="currentColor" />
+            <text x="50" y="8" text-anchor="middle" font-size="8" fill="currentColor">ENERGY</text>
+            <text x="50" y="98" text-anchor="middle" font-size="8" fill="currentColor">System</text>
+          </svg>
+        </div>
+        <div class="bios-title-block">
+          <h1>JARVIS SYSTEMS (R) QUANTUM BIOS v4.2.0</h1>
+          <h2>COPYRIGHT (C) 2026 JARVIS AI SYSTEMS.</h2>
+          <p>ASSEMBLY DATE: <span id="bios-date">02/03/2026</span></p>
+          <p>BIOS REVISION: MARK_IV_ULTIMATE</p>
+        </div>
+        <div class="bios-logo-right">
+          <span class="stark-logo">JARVIS</span>
+        </div>
+      </div>
+
+      <div class="bios-main">
+        <div class="bios-hardware-check">
+          <div class="check-row">Main Processor: <span class="white">QUANTUM NEURAL CORE i9 [256 CORES]</span>
+          </div>
+          <div class="check-row">Clock Speed: <span class="white">10.5 GHz (STABLE)</span></div>
+          <div class="check-row">Memory Test: <span id="memCounter">0</span> KB OK</div>
+          <div class="check-row">Primary Master: <span class="white">QUANTUM_CORE_DRIVE_01 (1024 PB)</span></div>
+          <div class="check-row">Primary Slave: <span class="white">SECURE_UPLINK_NODE_ALPHA</span></div>
+        </div>
+
+        <div class="bios-divider"></div>
+
+        <div id="bios-log" class="bios-log">
+          <!-- Log lines injected by JS -->
+        </div>
+      </div>
+
+      <div class="bios-footer">
+        <div class="footer-line">Press <span class="key">DEL</span> to enter SETUP</div>
+        <div class="footer-line">Press <span class="key">F12</span> for NETWORK BOOT</div>
+        <div class="footer-line blink">_</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-drag">
+      <span class="titlebar-icon">⚡</span>
+      <span class="titlebar-title">J.A.R.V.I.S. MARK IV</span>
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn minimize" id="minimizeBtn" title="Minimize">─</button>
+      <button class="titlebar-btn maximize" id="maximizeBtn" title="Maximize">□</button>
+      <button class="titlebar-btn close" id="closeBtn" title="Close">✕</button>
+    </div>
+  </div>
+
+  <!-- Tactical HUD Overlays -->
+  <div class="hud-overlay">
+    <div class="grid-background"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <!-- SVG Filters for Holographic Effects -->
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="hologram">
+      <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 0.8  0 0 0 0 0  0 0 0 1 0" />
+      <feGaussianBlur stdDeviation="0.5" />
+    </filter>
+  </svg>
+
+  <!-- Mode Toggle Header -->
+  <header class="mode-header">
+    <div class="mode-toggle">
+      <button class="mode-btn" id="voiceModeBtn" title="Voice Mode">
+        <span class="mode-icon">🎤</span>
+        <span class="mode-label">VOICE</span>
+      </button>
+      <div class="mode-divider"></div>
+      <button class="mode-btn active" id="chatModeBtn" title="Chat Mode">
+        <span class="mode-icon">💬</span>
+        <span class="mode-label">CHAT</span>
+      </button>
+      <div class="mode-divider"></div>
+      <button class="mode-btn" id="hackerModeBtn" title="Hacker Dashboard">
+        <span class="mode-icon">💀</span>
+        <span class="mode-label">HACK</span>
+      </button>
+      <div class="mode-divider"></div>
+      <button class="mode-btn repair-btn" id="repairModeBtn" title="System Repair">
+        <span class="mode-icon">🔧</span>
+        <span class="mode-label">REPAIR</span>
+      </button>
+    </div>
+    <div class="header-status">
+      <span class="jarvis-title">J.A.R.V.I.S.</span>
+      <span class="status-badge" id="modeStatus">CHAT MODE</span>
+    </div>
+    <div class="header-time">
+      <div id="hudClock">12:00:00</div>
+      <div id="hudDate">FEB 03, 2026</div>
+    </div>
+  </header>
+
+  <div class="jarvis-container" role="application">
+    <!-- LEFT PANEL: TACTICAL ARC REACTOR (Always visible) -->
+    <section class="left-panel">
+      <div class="telemetry-top">
+        <div class="telemetry-item">
+          <span class="label">CORE_TEMP</span>
+          <div class="bar-container">
+            <div class="bar" id="tempBar" style="width: 42%;"></div>
+          </div>
+          <span class="value">42°C</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="label">POWER_OUTPUT</span>
+          <div class="bar-container">
+            <div class="bar" id="powerBar" style="width: 89%;"></div>
+          </div>
+          <span class="value">8.9 GW</span>
+        </div>
+      </div>
+
+      <div class="reactor-assembly">
+        <div class="orb-wrapper" id="reactorParallax">
+          <!-- ARC REACTOR (TESSERACT MARK VII - ULTIMATE) -->
+          <!-- Placed correctly in the Telemetry Panel -->
+          <!-- ADVANCED VIBRANIUM ARC REACTOR -->
+          <div id="tesseract-container">
+            <svg id="arc-reactor-svg" viewBox="0 0 400 400">
+              <defs>
+                <!-- GLOW FILTERS -->
+                <filter id="blue-glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  <feDropShadow dx="0" dy="0" stdDeviation="15" flood-color="#00efff" flood-opacity="0.8" />
+                </filter>
+
+                <filter id="core-plasma-filter">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"
+                    result="noise" />
+                  <feColorMatrix type="saturate" values="0" in="noise" result="desatNoise" />
+                  <feComposite operator="in" in="desatNoise" in2="SourceGraphic" result="textured" />
+                  <feGaussianBlur stdDeviation="0.5" in="textured" />
+                </filter>
+
+                <linearGradient id="metal-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#2a3b4c" />
+                  <stop offset="50%" stop-color="#111" />
+                  <stop offset="100%" stop-color="#2a3b4c" />
+                </linearGradient>
+              </defs>
+
+              <!-- GROUP 1: BASE CHASSIS (Static Mount) -->
+              <g id="chassis-ring">
+                <circle cx="200" cy="200" r="190" fill="none" stroke="#2c3e50" stroke-width="2" stroke-opacity="0.5"
+                  stroke-dasharray="10 5" />
+                <circle cx="200" cy="200" r="180" fill="none" stroke="#00efff" stroke-width="1" opacity="0.3" />
+                <!-- Mounting Bolts -->
+                <circle cx="200" cy="20" r="3" fill="#4a5568" />
+                <circle cx="200" cy="380" r="3" fill="#4a5568" />
+                <circle cx="20" cy="200" r="3" fill="#4a5568" />
+                <circle cx="380" cy="200" r="3" fill="#4a5568" />
+              </g>
+
+              <!-- GROUP 2: MAGNETIC FIELD GENERATOR (Outer Rotating Ring) -->
+              <g id="mag-ring">
+                <circle cx="200" cy="200" r="160" fill="none" stroke="#00efff" stroke-width="4" stroke-dasharray="60 40"
+                  filter="url(#blue-glow-intense)" opacity="0.7" />
+                <circle cx="200" cy="200" r="155" fill="none" stroke="rgba(0, 239, 255, 0.2)" stroke-width="15" />
+                <!-- Circuit Details -->
+                <path d="M200,40 L200,60" stroke="#00efff" stroke-width="2" />
+                <path d="M200,340 L200,360" stroke="#00efff" stroke-width="2" />
+                <path d="M40,200 L60,200" stroke="#00efff" stroke-width="2" />
+                <path d="M340,200 L360,200" stroke="#00efff" stroke-width="2" />
+              </g>
+
+              <!-- GROUP 3: FOCUSING LENS (Inner Counter-Rotating Ring) -->
+              <g id="focus-ring">
+                <circle cx="200" cy="200" r="120" fill="none" stroke="#00efff" stroke-width="2"
+                  stroke-dasharray="2 8" />
+                <circle cx="200" cy="200" r="110" fill="none" stroke="url(#metal-gradient)" stroke-width="5" />
+                <!-- Energy Vents -->
+                <rect x="195" y="90" width="10" height="20" fill="#00efff" opacity="0.8" />
+                <rect x="195" y="290" width="10" height="20" fill="#00efff" opacity="0.8" />
+                <rect x="90" y="195" width="20" height="10" fill="#00efff" opacity="0.8" />
+                <rect x="290" y="195" width="20" height="10" fill="#00efff" opacity="0.8" />
+              </g>
+
+              <!-- GROUP 4: THE CORE (Mark VII Tesseract) -->
+              <g id="tesseract-core">
+                <!-- Outer Shield -->
+                <polygon points="200,300 113,150 287,150" fill="rgba(0,20,30,0.9)" stroke="#00efff" stroke-width="3" />
+
+                <!-- Plasma Fill -->
+                <polygon points="200,290 120,155 280,155" fill="#00efff" filter="url(#core-plasma-filter)" opacity="0.6"
+                  class="plasma-layer" />
+
+                <!-- Inner Geometry (The Singularity) -->
+                <polygon points="200,280 130,165 270,165" fill="none" stroke="#fff" stroke-width="2" opacity="0.8"
+                  filter="url(#blue-glow-intense)" />
+
+                <!-- Bright Center Point -->
+                <circle cx="200" cy="200" r="15" fill="#fff" filter="url(#blue-glow-intense)"
+                  class="singularity-point" />
+
+                <!-- Energy Arcs -->
+                <path d="M200,200 L200,280" stroke="#00efff" stroke-width="1" opacity="0.5" />
+                <path d="M200,200 L130,165" stroke="#00efff" stroke-width="1" opacity="0.5" />
+                <path d="M200,200 L270,165" stroke="#00efff" stroke-width="1" opacity="0.5" />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-box">
+        <div class="status-indicator">
+          <div class="dot" id="statusDot"></div>
+          <span id="statusText">IDLE</span>
+        </div>
+        <div class="system-id">MARK_IV_v.4.0.0</div>
+      </div>
+
+      <!-- Voice Mode Controls (visible in voice mode) -->
+      <div class="voice-controls" id="voiceControls">
+        <div class="voice-status" id="voiceStatus">
+          <span class="pulse-ring"></span>
+          <span class="voice-label">LISTENING</span>
+        </div>
+        <button class="terminate-btn voice-terminate" id="voiceTerminate" title="Terminate">
+          <span>⏹</span> TERMINATE
+        </button>
+      </div>
+
+      <div class="telemetry-bottom">
+        <div class="data-block">
+          <span class="title">SAT_LINK</span>
+          <span class="val">ESTABLISHED</span>
+        </div>
+        <div class="data-block">
+          <span class="title">GEO_LOC</span>
+          <span class="val" id="weatherLocation">MALIBU, CA</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: COMMAND CENTER (hidden in voice mode) -->
+    <section class="right-panel" id="chatPanel">
+      <div class="panel-header">
+        <h2>COMMAND INTERFACE</h2>
+        <div class="divider"></div>
+      </div>
+
+      <main id="messages" class="scroll-vignette"></main>
+
+      <!-- Thought Process / Deep Reasoning UI -->
+      <div id="thoughtContainer" class="thought-container hidden">
+        <div class="thought-header" id="thoughtHeader">
+          <span class="thought-icon">🧠</span>
+          <span class="thought-title">NEURAL PROCESSING</span>
+          <span class="thought-time" id="thoughtTimer">0.0s</span>
+          <button class="thought-toggle" id="thoughtToggle">▼</button>
+        </div>
+        <div class="thought-content" id="thoughtContent">
+          <!-- Streamed thoughts go here -->
+        </div>
+      </div>
+
+      <div id="typing" class="typing-indicator hidden">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <footer class="input-area">
+        <div class="file-drop" id="fileArea">
+          <input type="file" id="fileInput" multiple hidden />
+          <button class="icon-btn" id="attach" title="Attach Data">📎</button>
+        </div>
+        <input type="text" id="input" placeholder="AWAITING COMMAND..." autocomplete="off" />
+        <div class="action-btns">
+          <button class="icon-btn voice-toggle active" id="voiceToggle" title="Voice Output: ON">🔊</button>
+          <button class="terminate-btn" id="chatTerminate" title="Terminate Response">⏹</button>
+          <button class="icon-btn" id="mic" title="Voice Input">🎤</button>
+          <button class="icon-btn prime" id="send" title="Transmit">➤</button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+
+  <!-- Camera Overlay -->
+  <div id="cameraOverlay" class="hidden">
+    <div class="camera-frame">
+      <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
+      <canvas id="cameraCanvas" class="hidden"></canvas>
+      <div id="cameraCountdown" class="camera-countdown hidden">3</div>
+      <!-- New Cyberpunk Elements -->
+      <div class="camera-reticle"></div>
+      <div class="camera-scan-bar"></div>
+    </div>
+    <div class="camera-controls">
+      <button class="camera-btn" id="captureBtn">CAPTURE</button>
+      <button class="camera-btn" id="closeCameraBtn">CLOSE</button>
+    </div>
+  </div>
+
+  <!-- HACKER DASHBOARD OVERLAY -->
+  <div id="hackerDashboard" class="hidden">
+    <div class="dashboard-grid">
+      <!-- Header -->
+      <div class="dash-header">
+        <span class="dash-title">STARK_NET_SEC_OPS_v9.0</span>
+        <div class="dash-status">
+          <span class="status-indicator"></span> SYSTEM SECURE
+        </div>
+        <button class="dash-close" id="closeDashBtn">✕</button>
+      </div>
+
+      <!-- Main Console (Left) -->
+      <div class="dash-panel panel-console">
+        <div class="panel-label">COMMAND_LINE_INTERFACE</div>
+        <div class="console-output" id="consoleOutput">
+          <div class="line">Initializing security protocols...</div>
+          <div class="line">Ready.</div>
+        </div>
+        <div class="command-line">
+          <span class="prompt">root@jarvis:~#</span>
+          <input type="text" id="consoleInput" class="console-input" placeholder="Enter command..." autocomplete="off"
+            spellcheck="false">
+        </div>
+      </div>
+
+      <!-- Network Maps (Right Top) -->
+      <div class="dash-panel panel-network">
+        <div class="panel-label">GLOBAL_THREAT_VECTORS</div>
+        <div class="network-vis" id="networkVis">
+          <canvas id="threatMapCanvas"></canvas>
+          <div class="overlay-stats">
+            <div class="stat-row">THREATS: <span class="red-text" id="threatCount">0</span></div>
+            <div class="stat-row">LATENCY: <span class="green-text">12ms</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toolbox & Intel (Right Bottom) -->
+      <div class="dash-panel panel-intel">
+        <div class="panel-label">OPERATIONS_TOOLBOX</div>
+        <div class="toolbox-grid">
+          <button class="hack-btn btn-root" id="rootAccessBtn" data-cmd="activate illegal mode">⚠️ ROOT ACCESS</button>
+          <button class="hack-btn" data-cmd="scan local network">SCAN_LAN</button>
+          <button class="hack-btn" data-cmd="scan wifi">SCAN_WIFI</button>
+          <button class="hack-btn" data-cmd="scan google.com">SCAN_EXT</button>
+          <button class="hack-btn" data-cmd="show hacker news">INTEL_FEED</button>
+          <button class="hack-btn" data-cmd="trace ip">TRACE_ROUTE</button>
+          <button class="hack-btn action-danger" data-cmd="sim-flood target-server">LOIC_FLOOD</button>
+          <button class="hack-btn action-danger" data-cmd="activate matrix mode">MATRIX_SIM</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="matrix-bg" id="matrixBg"></div>
+  </div>
+
+  <!-- Hidden Live Region -->
+  <div id="jarvisLive" aria-live="polite" class="sr-only"></div>
+
+  <script type="module" src="script.js" defer></script>
+
+  <!-- Electron Titlebar Controls -->
+  <script>
+    // Check if running in Electron
+    if (window.electronAPI) {
+      document.body.classList.add('electron-app');
+
+      // Titlebar controls
+      document.getElementById('minimizeBtn')?.addEventListener('click', () => window.electronAPI.minimize());
+      document.getElementById('maximizeBtn')?.addEventListener('click', () => window.electronAPI.maximize());
+      document.getElementById('closeBtn')?.addEventListener('click', () => window.electronAPI.close());
+
+      console.log('[JARVIS] Running in Electron Desktop Mode');
+    } else {
+      // Hide titlebar in browser mode
+      const titlebar = document.getElementById('titlebar');
+      if (titlebar) titlebar.style.display = 'none';
+      console.log('[JARVIS] Running in Browser Mode');
+    }
+  </script>
+</body>
+
+</html>

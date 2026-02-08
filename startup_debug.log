@@ -1,0 +1,73 @@
+﻿[SYSTEM] Loaded 29 system applications.
+[PLUGIN] Initializing plugin system...
+[BROWSER] Plugin initialized
+[PLUGIN] Loaded: browser-control-plugin v1.0.0
+[CALENDAR] Plugin initialized with 1 reminders
+[PLUGIN] Loaded: calendar v1.0.0
+[CLIPBOARD] Plugin initialized
+[PLUGIN] Loaded: clipboard-plugin v1.0.0
+[FILE-EDITOR] Plugin initialized
+[PLUGIN] Loaded: file-editor-plugin v1.0.0
+[FILESYSTEM] Plugin initialized
+[PLUGIN] Loaded: filesystem-plugin v1.0.0
+[LOCATION] Plugin initialized
+[PLUGIN] Loaded: location-plugin v1.0.0
+[MEDIA] Media Control System Online
+[PLUGIN] Loaded: media-plugin v1.0.0
+[MEMORY] Initializing Memory System...
+[PLUGIN] Loaded: memory-plugin v2.0.0
+[NOTES] Plugin initialized with 0 notes
+[PLUGIN] Loaded: notes v1.0.0
+[NOTIFICATION] Plugin initialized
+[PLUGIN] Loaded: notification-plugin v1.0.0
+[PROCESS-MANAGER] Plugin initialized
+[PLUGIN] Loaded: process-manager-plugin v1.0.0
+[SCREENSHOT] Plugin initialized
+[SCREENSHOT] Saving to: C:\Users\jassi\Pictures\JARVIS Screenshots
+[PLUGIN] Loaded: screenshot-plugin v1.0.0
+[SEARCH] Plugin initialized
+[PLUGIN] Loaded: search v1.0.0
+[EVOLUTION] AI-Driven Evolution System Online
+[PLUGIN] Loaded: self-evolution-plugin v2.0.0
+[SYSTEM-CONTROL] Plugin initialized
+[PLUGIN] Loaded: system-control-plugin v1.0.0
+[PLUGIN] System Info Loaded
+[PLUGIN] Loaded: system-info-plugin v1.0.0
+[SYSTEM-MONITOR] Plugin initialized with real-time monitoring
+[PLUGIN] Loaded: system-monitor v1.0.0
+[WEATHER] Plugin initialized
+[PLUGIN] Loaded: weather v1.0.0
+[PLUGIN] System initialized with 18 plugins
+[INTENT] Initializing NLP model...
+[INTENT] Classifier trained with intents: [
+  'system.open',           'system.close',
+  'weather.get',           'calendar.create',
+  'calendar.list',         'notes.create',
+  'notes.list',            'search.web',
+  'system.time',           'system.date',
+  'system.status',         'file.find',
+  'location.get',          'process.list',
+  'process.kill',          'clipboard.read',
+  'clipboard.write',       'screenshot.take',
+  'notification.send',     'conversation.greeting',
+  'conversation.farewell', 'conversation.thanks',
+  'system.integrate',      'system.upgrade'
+]
+[AI] Checking available providers...
+[AI] Γ£ô Ollama available
+[AI] Γ£ô Groq Cloud available (API key configured)
+[AI] Active provider: ollama
+
+ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
+Γòæ     JARVIS MARK IV - ONLINE           Γòæ
+ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+
+[SERVER] Running on port 3000
+[WEBSOCKET] Real-time communication enabled
+[AI] Active provider: Ollama (Local)
+[PLUGINS] Advanced plugin system loaded
+[CONTEXT] Conversation tracking active
+[INTENT] NLP recognition enabled
+
+All systems operational. Standing by...
+

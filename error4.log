@@ -1,0 +1,77 @@
+﻿node : node:internal/
+modules/package_json_
+reader:316
+At line:1 char:1
++ node server.js 
+2>&1 | Out-File 
+-Encoding utf8 
+error4.log
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (node:in   
+ ternal/m...json_    
+reader:316:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  throw new ERR_MODUL
+E_NOT_FOUND(packageNa
+me, 
+fileURLToPath(base), 
+null);
+        ^
+
+Error [ERR_MODULE_NOT
+_FOUND]: Cannot find 
+package 'natural' 
+imported from E:\ultr
+a-jarvis\lib\intent-r
+ecognizer.js
+    at Object.getPack
+ageJSONURL (node:inte
+rnal/modules/package_
+json_reader:316:9)
+    at 
+packageResolve (node:
+internal/modules/esm/
+resolve:768:81)
+    at moduleResolve 
+(node:internal/module
+s/esm/resolve:858:18)
+    at 
+defaultResolve (node:
+internal/modules/esm/
+resolve:990:11)
+    at #cachedDefault
+Resolve (node:interna
+l/modules/esm/loader:
+718:20)
+    at #resolveAndMay
+beBlockOnLoaderThread
+ (node:internal/modul
+es/esm/loader:735:38)
+    at ModuleLoader.r
+esolveSync (node:inte
+rnal/modules/esm/load
+er:764:52)
+    at #resolve (node
+:internal/modules/esm
+/loader:700:17)
+    at ModuleLoader.g
+etOrCreateModuleJob (
+node:internal/modules
+/esm/loader:620:35)
+    at 
+ModuleJob.syncLink (n
+ode:internal/modules/
+esm/module_job:143:33
+) {
+  code: 'ERR_MODULE_N
+OT_FOUND'
+}
+
+Node.js v24.13.0
